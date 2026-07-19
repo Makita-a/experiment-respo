@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makita Islam Mim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap&font-display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--black:#0a0a0a;--white:#f5f5f5;--red:#cc1a1a;--gray:#888;--border:#222;--font-display:'Bebas Neue',sans-serif;--font-serif:'Playfair Display',serif;--font-body:'DM Sans',sans-serif;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);overflow-x:hidden;}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:var(--black);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .5s ease,visibility .5s ease;}
+#loader.hidden{opacity:0;visibility:hidden;}
+.loader-word{font-family:var(--font-display);font-size:clamp(4rem,15vw,12rem);color:var(--white);letter-spacing:.05em;overflow:hidden;}
+.loader-word span{display:inline-block;animation:slideUp .6s cubic-bezier(.76,0,.24,1) both;}
+.loader-word span:nth-child(1){animation-delay:.05s;}.loader-word span:nth-child(2){animation-delay:.1s;}.loader-word span:nth-child(3){animation-delay:.15s;}.loader-word span:nth-child(4){animation-delay:.2s;}.loader-word span:nth-child(5){animation-delay:.25s;}.loader-word span:nth-child(6){animation-delay:.3s;}
+.loader-progress{position:absolute;bottom:0;left:0;height:3px;background:var(--red);animation:progress 1.8s ease forwards;}
+@keyframes slideUp{from{transform:translateY(110%);}to{transform:translateY(0);}}
+@keyframes progress{from{width:0;}to{width:100%;}}
+#main{opacity:0;transition:opacity .5s ease;}
+#main.visible{opacity:1;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.8rem 2.5rem;border-bottom:1px solid var(--border);background:rgba(10,10,10,.92);backdrop-filter:blur(8px);}
+.nav-logo{font-family:var(--font-display);font-size:1.2rem;letter-spacing:.08em;color:var(--white);text-decoration:none;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--white);}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;padding-top:52px;overflow:hidden;}
+.hero-left{display:flex;flex-direction:column;justify-content:flex-end;padding:3rem 2.5rem 3rem;border-right:1px solid var(--border);position:relative;overflow:hidden;}
+
+/* chrome drip top of hero */
+.drip-deco{position:absolute;top:-20px;left:0;right:0;width:100%;height:220px;object-fit:cover;object-position:top;opacity:.18;pointer-events:none;z-index:0;mix-blend-mode:screen;}
+
+/* chrome star decorations */
+.chrome-star{position:absolute;pointer-events:none;z-index:1;opacity:.55;}
+.chrome-star img{width:100%;height:100%;object-fit:contain;}
+.star-1{width:70px;height:70px;top:80px;right:20px;animation:float 4s ease-in-out infinite;}
+.star-2{width:50px;height:50px;bottom:120px;left:10px;animation:float 5s ease-in-out infinite .8s;}
+.star-3{width:40px;height:40px;top:160px;left:50%;animation:float 3.5s ease-in-out infinite .3s;}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-10px) rotate(4deg);}}
+
+.hero-content{position:relative;z-index:2;}
+.hero-portfolio-text{font-family:var(--font-display);font-size:clamp(5rem,13vw,11rem);line-height:.88;letter-spacing:.02em;color:var(--white);margin-bottom:2rem;}
+.hero-portfolio-text .outline{-webkit-text-stroke:1.5px var(--white);color:transparent;}
+.hero-name-script{font-family:var(--font-serif);font-size:clamp(2rem,5vw,3.8rem);font-style:italic;color:var(--red);margin-bottom:1.5rem;line-height:1;}
+.hero-bio{font-size:.82rem;line-height:1.85;color:var(--gray);max-width:340px;font-weight:300;}
+.hero-bio strong{color:var(--white);font-weight:500;}
+.hero-tag{display:inline-block;border:1px solid var(--red);color:var(--red);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .8rem;margin-top:1.5rem;}
+.hero-right{position:relative;overflow:hidden;}
+.hero-img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(20%);}
+.hero-img-placeholder{width:100%;height:100%;min-height:500px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;}
+.hero-img-placeholder span{font-family:var(--font-display);font-size:.8rem;letter-spacing:.3em;color:#333;text-transform:uppercase;}
+.hero-red-overlay{position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(to top,rgba(140,10,10,.5),transparent);pointer-events:none;}
+.hero-label{position:absolute;bottom:1.5rem;right:1.5rem;font-family:var(--font-display);font-size:.7rem;letter-spacing:.2em;color:rgba(255,255,255,.4);}
+/* chrome drip on hero-right */
+.hero-right .drip-right{position:absolute;top:-10px;left:0;right:0;width:100%;height:180px;object-fit:cover;object-position:top center;opacity:.22;pointer-events:none;z-index:3;mix-blend-mode:screen;}
+
+/* ── TICKER ── */
+.ticker-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:.6rem 0;background:var(--red);}
+.ticker{display:flex;gap:3rem;white-space:nowrap;animation:ticker 18s linear infinite;}
+.ticker-item{font-family:var(--font-display);font-size:1rem;letter-spacing:.15em;color:var(--white);}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SECTION ── */
+.section{border-top:1px solid var(--border);}
+.section-inner{max-width:1200px;margin:0 auto;padding:5rem 2.5rem;}
+.sec-header{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:4rem;position:relative;}
+.sec-num{font-family:var(--font-display);font-size:5rem;color:var(--border);line-height:1;user-select:none;}
+.sec-title{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);letter-spacing:.04em;color:var(--white);}
+.sec-title .red{color:var(--red);}
+/* small chrome star near section headers */
+.sec-star{width:40px;height:40px;margin-left:auto;opacity:.4;animation:float 4s ease-in-out infinite;}
+
+/* ── ABOUT ── */
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.intro-big{font-family:var(--font-display);font-size:clamp(3rem,7vw,6rem);line-height:.9;letter-spacing:.02em;color:var(--white);margin-bottom:1.5rem;}
+.intro-big .outline{-webkit-text-stroke:1px var(--white);color:transparent;}
+.intro-text{font-size:.88rem;line-height:1.9;color:var(--gray);font-weight:300;}
+.intro-text strong{color:var(--white);font-weight:500;}
+.intro-text p+p{margin-top:1rem;}
+.facts-list{list-style:none;margin-top:2rem;}
+.fact-row{display:flex;justify-content:space-between;align-items:baseline;padding:.8rem 0;border-bottom:1px solid var(--border);}
+.fact-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gray);}
+.fact-val{font-size:.78rem;color:var(--white);text-align:right;max-width:55%;}
+
+/* ── EDU CARDS ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.edu-card{border:1px solid var(--border);padding:2rem;position:relative;text-decoration:none;display:block;transition:border-color .25s,background .25s;overflow:hidden;}
+.edu-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--red);transition:height .3s ease;}
+.edu-card:hover{border-color:#444;background:#111;}
+.edu-card:hover::before{height:100%;}
+.edu-card-num{font-family:var(--font-display);font-size:4rem;color:#1a1a1a;line-height:1;margin-bottom:.5rem;}
+.edu-card-title{font-family:var(--font-display);font-size:1.4rem;letter-spacing:.05em;color:var(--white);margin-bottom:.4rem;}
+.edu-card-sub{font-size:.68rem;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;}
+.edu-card-desc{font-size:.75rem;color:#555;line-height:1.6;}
+.edu-card-arrow{position:absolute;bottom:1.5rem;right:1.5rem;color:var(--red);font-size:1.2rem;opacity:0;transition:opacity .2s,transform .2s;}
+.edu-card:hover .edu-card-arrow{opacity:1;transform:translateX(4px);}
+
+/* ── WORK INLINE BLOCKS ── */
+.work-block{border:1px solid var(--border);padding:2.5rem;margin-bottom:2rem;position:relative;overflow:hidden;}
+.work-block::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--red);}
+.work-block-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.work-block-left{}
+.work-block-tag{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--red);margin-bottom:.4rem;display:block;}
+.work-block-title{font-family:var(--font-display);font-size:2rem;letter-spacing:.05em;color:var(--white);}
+.work-block-title .outline-sm{-webkit-text-stroke:1px var(--white);color:transparent;}
+.work-block-sub{font-size:.7rem;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;margin-top:.3rem;}
+.work-block-link{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--red);color:var(--red);text-decoration:none;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:.5rem 1rem;transition:background .2s,color .2s;white-space:nowrap;align-self:flex-start;}
+.work-block-link:hover{background:var(--red);color:var(--white);}
+.work-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.work-text{font-size:.85rem;line-height:1.9;color:var(--gray);font-weight:300;}
+.work-text strong{color:var(--white);font-weight:500;}
+.work-text p+p{margin-top:.8rem;}
+.work-tags{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;}
+.work-tag{border:1px solid var(--border);padding:.7rem 1rem;font-size:.68rem;color:var(--gray);letter-spacing:.04em;position:relative;}
+.work-tag::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--red);}
+
+/* pic slots for work blocks */
+.work-pics{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;}
+.work-pic-slot{aspect-ratio:4/3;background:#111;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+.work-pic-slot img{width:100%;height:100%;object-fit:cover;display:block;}
+.work-pic-slot .pic-ph{font-size:.55rem;color:#333;letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:1rem;line-height:1.8;}
+.work-pic-slot .pic-label{position:absolute;bottom:.5rem;left:.7rem;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:#444;}
+
+/* ── HOBBY GRID ── */
+.hobby-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:1.5rem;}
+
+/* BIG cards */
+.hobby-card-big{border:1px solid var(--border);padding:2.8rem 2.4rem;text-decoration:none;display:block;position:relative;overflow:hidden;transition:border-color .25s;min-height:300px;}
+.hobby-card-big::after{content:'';position:absolute;inset:0;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.76,0,.24,1);z-index:0;}
+.hobby-card-big:hover{border-color:var(--red);}
+.hobby-card-big:hover::after{transform:scaleX(1);}
+.hobby-card-big-inner{position:relative;z-index:1;}
+.hobby-card-big:hover .hb-num,.hobby-card-big:hover .hb-title,.hobby-card-big:hover .hb-desc,.hobby-card-big:hover .hb-tag{color:var(--white);}
+.hobby-card-big:hover .hb-num{color:rgba(255,255,255,.12);}
+.hobby-card-big:hover .hb-desc{color:rgba(255,255,255,.75);}
+.hobby-card-big:hover .hb-tag{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.6);}
+.hb-emoji{font-size:2.4rem;margin-bottom:1rem;display:block;}
+.hb-num{font-family:var(--font-display);font-size:5rem;color:#1a1a1a;line-height:1;margin-bottom:.3rem;transition:color .3s;}
+.hb-title{font-family:var(--font-display);font-size:2.4rem;letter-spacing:.04em;color:var(--white);margin-bottom:.6rem;transition:color .3s;}
+.hb-desc{font-size:.78rem;color:var(--gray);line-height:1.7;margin-bottom:1rem;transition:color .3s;}
+.hb-tag{display:inline-block;border:1px solid #333;color:var(--gray);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.25rem .7rem;transition:all .3s;}
+
+/* SMALL cards */
+.hobby-card-small{border:1px solid var(--border);padding:1.6rem 1.8rem;text-decoration:none;display:block;position:relative;overflow:hidden;transition:border-color .25s,background .25s;}
+.hobby-card-small::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--red);transition:height .3s ease;}
+.hobby-card-small:hover{border-color:#444;background:#0f0f0f;}
+.hobby-card-small:hover::before{height:100%;}
+.hs-emoji{font-size:1.4rem;margin-bottom:.6rem;display:block;}
+.hs-num{font-family:var(--font-display);font-size:2.5rem;color:#1a1a1a;line-height:1;margin-bottom:.2rem;}
+.hs-title{font-family:var(--font-display);font-size:1.3rem;letter-spacing:.05em;color:var(--white);margin-bottom:.3rem;}
+.hs-desc{font-size:.7rem;color:var(--gray);line-height:1.6;}
+
+/* ── SLIDESHOW (Photography & Art) ── */
+.slideshow-section{border-top:1px solid var(--border);}
+.slideshow-inner{max-width:1200px;margin:0 auto;padding:5rem 2.5rem;}
+.slide-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.slide-tab{font-family:var(--font-display);font-size:1.4rem;letter-spacing:.08em;color:var(--gray);padding:1rem 2rem;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;}
+.slide-tab.active{color:var(--white);border-bottom-color:var(--red);}
+.slide-tab:hover{color:var(--white);}
+.slide-panel{display:none;}
+.slide-panel.active{display:block;}
+.slide-desc{font-size:.85rem;line-height:1.9;color:var(--gray);max-width:600px;margin-bottom:2rem;font-weight:300;}
+.slide-desc strong{color:var(--white);font-weight:500;}
+
+/* SLIDESHOW VIEWER */
+.slideshow-viewer{position:relative;background:#111;border:1px solid var(--border);overflow:hidden;aspect-ratio:16/8;margin-bottom:1rem;}
+.slide-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s ease;}
+.slide-img.active{opacity:1;}
+.slide-img-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;}
+.slide-img-placeholder span{font-family:var(--font-display);font-size:.75rem;letter-spacing:.2em;color:#2a2a2a;text-transform:uppercase;}
+.slide-counter{position:absolute;bottom:1rem;right:1.5rem;font-family:var(--font-display);font-size:.9rem;color:rgba(255,255,255,.3);letter-spacing:.1em;}
+.slide-nav{display:flex;gap:1rem;align-items:center;justify-content:space-between;}
+.slide-arrows{display:flex;gap:.8rem;}
+.slide-btn{width:44px;height:44px;border:1px solid var(--border);background:transparent;color:var(--white);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s;}
+.slide-btn:hover{border-color:var(--red);background:var(--red);}
+.slide-dots{display:flex;gap:.5rem;align-items:center;}
+.slide-dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s,transform .2s;}
+.slide-dot.active{background:var(--red);transform:scale(1.4);}
+
+/* ADD PHOTO GRID */
+.add-photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem;}
+.add-photo-slot{aspect-ratio:1;background:#111;border:1px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;}
+.add-photo-slot:hover{border-color:#444;}
+.add-photo-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.add-photo-slot img{width:100%;height:100%;object-fit:cover;display:none;}
+.add-photo-slot .slot-ph{display:flex;flex-direction:column;align-items:center;gap:.4rem;pointer-events:none;}
+.add-photo-slot .slot-ph span{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#333;}
+.add-photo-slot .slot-ph .plus{font-size:1.5rem;color:#2a2a2a;}
+
+/* ── CONTACT ── */
+.contact-section{background:#0f0f0f;}
+.contact-big{font-family:var(--font-display);font-size:clamp(3rem,9vw,8rem);letter-spacing:.02em;line-height:.9;color:var(--white);margin-bottom:3rem;}
+.contact-big em{font-family:var(--font-serif);font-style:italic;color:var(--red);}
+.contact-row{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.contact-item{border:1px solid var(--border);padding:1.2rem 1.8rem;text-decoration:none;display:flex;align-items:center;gap:.8rem;transition:border-color .2s,background .2s;flex:1;min-width:200px;}
+.contact-item:hover{border-color:var(--red);background:#111;}
+.contact-label{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gray);display:block;margin-bottom:.2rem;}
+.contact-val{font-size:.78rem;color:var(--white);}
+
+footer{border-top:1px solid var(--border);padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#333;}
+.footer-name{font-family:var(--font-display);font-size:.9rem;letter-spacing:.08em;color:#222;}
+
+/* chrome star sprite helper — clip regions from the sprite image */
+.sprite-wrap{width:100%;height:100%;overflow:hidden;position:relative;}
+.sprite-wrap img{position:absolute;transform-origin:center;image-rendering:auto;}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-word"><span>M</span><span>A</span><span>K</span><span>I</span><span>T</span><span>A</span></div>
+  <div class="loader-progress"></div>
+</div>
+
+<div id="main">
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">MIM</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#hobbies">Hobbies</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <!-- Chrome drip top -->
+    <img class="drip-deco" src="drip.jpg" alt="">
+
+    <!-- Floating chrome stars (clipped from sprite) -->
+    <div class="chrome-star star-1">
+      <div class="sprite-wrap" style="height:70px;">
+        <img src="chrome-elements.jpg" style="width:300%;top:-5%;left:-65%;" alt="">
+      </div>
+    </div>
+    <div class="chrome-star star-2">
+      <div class="sprite-wrap" style="height:50px;">
+        <img src="chrome-elements.jpg" style="width:350%;top:-30%;left:-5%;" alt="">
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-portfolio-text">PORT<br><span class="outline">FOLIO</span></div>
+      <div class="hero-name-script">Makita Islam Mim</div>
+      <p class="hero-bio">A <strong>Computer Science &amp; Communication Engineering</strong> student at Waseda University, Tokyo. Born in Tokyo, raised in Bangladesh — shaped by two cultures, driven by curiosity.</p>
+      <span class="hero-tag">CS &amp; Comm. Engineering · Waseda University</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img class="drip-right" src="drip.jpg" alt="">
+    <img class="hero-img" src="photo.jpg" alt="Makita Islam Mim"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+    <div class="hero-img-placeholder" style="display:none;"><span>Drop your photo here as photo.jpg</span></div>
+    <div class="hero-red-overlay"></div>
+    <div class="hero-label">2026</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">COMPUTER SCIENCE</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">CYBERSECURITY</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">PHOTOGRAPHY</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">INTERMEDIA ART</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">WASEDA UNIVERSITY</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">TOKYO · DHAKA</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">SMART CONTRACTS</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">GDSC MEMBER</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">COMPUTER SCIENCE</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">CYBERSECURITY</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">PHOTOGRAPHY</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">INTERMEDIA ART</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">WASEDA UNIVERSITY</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">TOKYO · DHAKA</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">SMART CONTRACTS</span><span class="ticker-item">✦</span>
+    <span class="ticker-item">GDSC MEMBER</span><span class="ticker-item">✦</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-inner">
+    <div class="sec-header">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">ABOUT <span class="red">ME</span></h2>
+      <img class="sec-star" src="chrome-elements.jpg" alt="" style="width:40px;height:40px;object-fit:cover;object-position:75% 25%;border-radius:0;opacity:.35;animation:float 4s ease-in-out infinite;">
+    </div>
+    <div class="intro-grid">
+      <div>
+        <div class="intro-big">BORN<br><span class="outline">TOKYO</span><br>RAISED<br><span class="outline">DHAKA</span></div>
+      </div>
+      <div>
+        <div class="intro-text">
+          <p>I was born in Tokyo and raised with strong Bangladeshi roots, growing up between two cultures that shaped who I am. You could say I was raised on both sushi and biryani.</p>
+          <p>Experiencing different cultures from an early age taught me <strong>adaptability, curiosity, and the importance of understanding people</strong> from diverse backgrounds. Whether through technology, art, food, or travel, I enjoy exploring how different perspectives come together.</p>
+        </div>
+        <ul class="facts-list">
+          <li class="fact-row"><span class="fact-label">Born in</span><span class="fact-val">Tokyo, Japan</span></li>
+          <li class="fact-row"><span class="fact-label">Raised in</span><span class="fact-val">Dhaka, Bangladesh</span></li>
+          <li class="fact-row"><span class="fact-label">Nationality</span><span class="fact-val">Bangladeshi</span></li>
+          <li class="fact-row"><span class="fact-label">Languages</span><span class="fact-val">English · Japanese · Bengali · Hindi</span></li>
+          <li class="fact-row"><span class="fact-label">Research</span><span class="fact-val">Sako Lab — Smart Contract Security</span></li>
+          <li class="fact-row"><span class="fact-label">Minors</span><span class="fact-val">Physical Electronics · Intermedia Art &amp; Sciences</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="section" id="education">
+  <div class="section-inner">
+    <div class="sec-header">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">EDUCA<span class="red">TION</span></h2>
+    </div>
+    <div class="two-col">
+      <a class="edu-card" href="edu-waseda.html">
+        <div class="edu-card-num">01</div>
+        <div class="edu-card-title">WASEDA UNIVERSITY</div>
+        <div class="edu-card-sub">Tokyo, Japan · 2022 – Present</div>
+        <div class="edu-card-desc">B.Eng. Computer Science &amp; Communications Engineering. Minors in Physical Electronics and Intermedia Art &amp; Sciences. Sako Lab — AI-based smart contract vulnerability detection.</div>
+        <span class="edu-card-arrow">→</span>
+      </a>
+      <a class="edu-card" href="edu-highschool.html">
+        <div class="edu-card-num">02</div>
+        <div class="edu-card-title">OXFORD INT'L SCHOOL</div>
+        <div class="edu-card-sub">Dhaka, Bangladesh · KG – Grade 12</div>
+        <div class="edu-card-desc">Cambridge O Levels &amp; A Levels. Achieved 4 A grades in Mathematics, Physics, Biology, and Computer Science.</div>
+        <span class="edu-card-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- WORK & RESEARCH — inline, no separate pages -->
+<section class="section" id="work">
+  <div class="section-inner">
+    <div class="sec-header">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">WORK &amp; <span class="red">RESEARCH</span></h2>
+    </div>
+
+    <!-- SAKO LAB BLOCK -->
+    <div class="work-block">
+      <div class="work-block-head">
+        <div class="work-block-left">
+          <span class="work-block-tag">Cybersecurity Research · 2024 – Present</span>
+          <div class="work-block-title">SAKO LAB · <span class="outline-sm">WASEDA</span></div>
+          <div class="work-block-sub">AI-Based Smart Contract Vulnerability Detection</div>
+        </div>
+        <a class="work-block-link" href="https://sako-lab.jp/en" target="_blank" rel="noopener">Visit Lab ↗</a>
+      </div>
+      <div class="work-grid">
+        <div class="work-text">
+          <p>I am a member of the <strong>Sako Laboratory</strong> — a cybersecurity research group at Waseda University — where my work sits at the intersection of Artificial Intelligence and blockchain security.</p>
+          <p>My research focuses on using machine learning to automatically detect vulnerabilities in <strong>smart contracts</strong>. In particular, I work on identifying <strong>reentrancy attacks</strong> — one of the most notorious vulnerability classes in smart contract history, responsible for some of the largest hacks in DeFi, including The DAO hack (2016) where $60 million was drained.</p>
+          <p>My broader interests include <strong>cybersecurity, blockchain security, software engineering, AI, and secure system design</strong>.</p>
+        </div>
+        <div>
+          <div class="work-tags">
+            <div class="work-tag">Smart Contract Security</div>
+            <div class="work-tag">Reentrancy Attacks</div>
+            <div class="work-tag">AI / Machine Learning</div>
+            <div class="work-tag">Blockchain Security</div>
+            <div class="work-tag">Vulnerability Detection</div>
+            <div class="work-tag">Secure System Design</div>
+          </div>
+        </div>
+      </div>
+      <!-- Add your lab/research photos here -->
+      <div class="work-pics">
+        <div class="work-pic-slot">
+          <img id="sako-pic-1" src="" alt="" style="display:none;">
+          <div class="pic-ph">Add research photo<br>e.g. lab, poster, screenshot</div>
+          <input type="file" accept="image/*" onchange="loadPic(this,'sako-pic-1')">
+          <span class="pic-label">Photo 1</span>
+        </div>
+        <div class="work-pic-slot">
+          <img id="sako-pic-2" src="" alt="" style="display:none;">
+          <div class="pic-ph">Add research photo<br>e.g. lab, poster, screenshot</div>
+          <input type="file" accept="image/*" onchange="loadPic(this,'sako-pic-2')">
+          <span class="pic-label">Photo 2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GDSC BLOCK -->
+    <div class="work-block">
+      <div class="work-block-head">
+        <div class="work-block-left">
+          <span class="work-block-tag">Student Club · Waseda University</span>
+          <div class="work-block-title">GDSC · <span class="outline-sm">WASEDA</span></div>
+          <div class="work-block-sub">Google Developer Student Clubs — Frontend Team</div>
+        </div>
+      </div>
+      <div class="work-grid">
+        <div class="work-text">
+          <p>I was a member of the <strong>Google Developer Student Club (GDSC) at Waseda University</strong>, where I worked on the frontend team.</p>
+          <p>GDSC is a Google-supported program that brings together students passionate about technology, development, and community. At Waseda, we collaborated on real projects, ran workshops, and helped bridge the gap between student developers and industry tools.</p>
+          <p>Being on the <strong>frontend team</strong> meant designing and building interfaces — a natural extension of my interest in art, design, and how things look and feel for real users.</p>
+        </div>
+        <div>
+          <div class="work-tags">
+            <div class="work-tag">Frontend Development</div>
+            <div class="work-tag">UI / UX</div>
+            <div class="work-tag">Google Developer Club</div>
+            <div class="work-tag">Waseda University</div>
+            <div class="work-tag">Team Collaboration</div>
+            <div class="work-tag">Community Building</div>
+          </div>
+        </div>
+      </div>
+      <!-- Add your GDSC photos here — two slots as requested -->
+      <div class="work-pics">
+        <div class="work-pic-slot">
+          <img id="gdsc-pic-1" src="" alt="" style="display:none;">
+          <div class="pic-ph">Add GDSC photo<br>e.g. event, team, workshop</div>
+          <input type="file" accept="image/*" onchange="loadPic(this,'gdsc-pic-1')">
+          <span class="pic-label">Photo 1</span>
+        </div>
+        <div class="work-pic-slot">
+          <img id="gdsc-pic-2" src="" alt="" style="display:none;">
+          <div class="pic-ph">Add GDSC photo<br>e.g. event, team, workshop</div>
+          <input type="file" accept="image/*" onchange="loadPic(this,'gdsc-pic-2')">
+          <span class="pic-label">Photo 2</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOBBIES -->
+<section class="section" id="hobbies">
+  <div class="section-inner">
+    <div class="sec-header">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title">HOB<span class="red">BIES</span></h2>
+    </div>
+    <div class="hobby-grid">
+      <!-- BIG: Photography -->
+      <div class="hobby-card-big" style="cursor:default;">
+        <div class="hobby-card-big-inner">
+          <span class="hb-emoji">📷</span>
+          <div class="hb-num">01</div>
+          <div class="hb-title">PHOTOGRAPHY</div>
+          <div class="hb-desc">iPhone 16 Pro &amp; Kodak PixPro. Sky obsessed. I spend more time editing than shooting — and I'm fine with that.</div>
+          <a href="#gallery" class="hb-tag" style="text-decoration:none;">See my gallery ↓</a>
+        </div>
+      </div>
+      <!-- BIG: Art -->
+      <div class="hobby-card-big" style="cursor:default;">
+        <div class="hobby-card-big-inner">
+          <span class="hb-emoji">🎨</span>
+          <div class="hb-num">02</div>
+          <div class="hb-title">ART</div>
+          <div class="hb-desc">Sketching, drawing, and exploring where technology and human expression meet. Art is why I chose Intermedia Art &amp; Sciences as a minor at Waseda.</div>
+          <a href="#gallery" class="hb-tag" style="text-decoration:none;">See my work ↓</a>
+        </div>
+      </div>
+      <!-- SMALL: Cooking -->
+      <a class="hobby-card-small" href="hobby-cooking.html">
+        <span class="hs-emoji">🍳</span>
+        <div class="hs-num">03</div>
+        <div class="hs-title">COOKING</div>
+        <div class="hs-desc">Hosted a biryani class for 20 people. Always experimenting with dishes my parents never made.</div>
+      </a>
+      <!-- SMALL: Exploring -->
+      <a class="hobby-card-small" href="hobby-exploring.html">
+        <span class="hs-emoji">🌏</span>
+        <div class="hs-num">04</div>
+        <div class="hs-title">EXPLORING</div>
+        <div class="hs-desc">14 cuisines tried. Cafés, neighbourhoods, hidden spots. Always open to recommendations.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY SLIDESHOW — Photography & Art tabs -->
+<section class="slideshow-section" id="gallery">
+  <div class="slideshow-inner">
+    <div class="sec-header" style="margin-bottom:2rem;">
+      <span class="sec-num">05</span>
+      <h2 class="sec-title">GAL<span class="red">LERY</span></h2>
+    </div>
+
+    <!-- TABS -->
+    <div class="slide-tabs">
+      <div class="slide-tab active" onclick="switchTab('photo')">📷 Photography</div>
+      <div class="slide-tab" onclick="switchTab('art')">🎨 Art</div>
+    </div>
+
+    <!-- PHOTOGRAPHY PANEL -->
+    <div class="slide-panel active" id="panel-photo">
+      <p class="slide-desc">I shoot on my <strong>iPhone 16 Pro</strong> and <strong>Kodak PixPro FZ55</strong>. Mostly sky, street, and golden hour. The edit is where I spend most of my time. If you love sky photos too — send me yours.</p>
+
+      <div class="slideshow-viewer" id="viewer-photo">
+        <!-- Add your photos: replace the src="" with your image filenames -->
+        <img class="slide-img active" src="photo1.jpg" alt="Photo 1"
+          onerror="this.style.display='none'">
+        <img class="slide-img" src="photo2.jpg" alt="Photo 2"
+          onerror="this.style.display='none'">
+        <img class="slide-img" src="photo3.jpg" alt="Photo 3"
+          onerror="this.style.display='none'">
+        <img class="slide-img" src="photo4.jpg" alt="Photo 4"
+          onerror="this.style.display='none'">
+        <img class="slide-img" src="photo5.jpg" alt="Photo 5"
+          onerror="this.style.display='none'">
+        <!-- Placeholder shown when no photos loaded -->
+        <div class="slide-img-placeholder" id="ph-photo">
+          <span>☁️</span>
+          <span>Add your photos — see instructions below</span>
+        </div>
+        <div class="slide-counter" id="counter-photo">1 / 5</div>
+      </div>
+
+      <div class="slide-nav">
+        <div class="slide-arrows">
+          <button class="slide-btn" onclick="prevSlide('photo')">←</button>
+          <button class="slide-btn" onclick="nextSlide('photo')">→</button>
+        </div>
+        <div class="slide-dots" id="dots-photo"></div>
+      </div>
+
+      <!-- Extra photo slots to add more -->
+      <div style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;">
+        <div style="font-family:var(--font-display);font-size:1rem;letter-spacing:.1em;color:var(--gray);margin-bottom:1rem;">ADD MORE PHOTOS — click a slot to upload</div>
+        <div class="add-photo-grid" id="photo-add-grid">
+          <!-- slots generated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ART PANEL -->
+    <div class="slide-panel" id="panel-art">
+      <p class="slide-desc">Art has always been part of how I think. It's why I chose <strong>Intermedia Art &amp; Sciences as a minor</strong> at Waseda — exploring the intersection of technology, design, and human expression.</p>
+
+      <div class="slideshow-viewer" id="viewer-art">
+        <img class="slide-img active" src="art1.jpg" alt="Art 1"
+          onerror="this.style.display='none'">
+        <img class="slide-img" src="art2.jpg" alt="Art 2"
+          onerror="this.style.display='none'">
+        <img class="slide-img" src="art3.jpg" alt="Art 3"
+          onerror="this.style.display='none'">
+        <img class="slide-img" src="art4.jpg" alt="Art 4"
+          onerror="this.style.display='none'">
+        <div class="slide-img-placeholder" id="ph-art">
+          <span>🎨</span>
+          <span>Add your artwork — see instructions below</span>
+        </div>
+        <div class="slide-counter" id="counter-art">1 / 4</div>
+      </div>
+
+      <div class="slide-nav">
+        <div class="slide-arrows">
+          <button class="slide-btn" onclick="prevSlide('art')">←</button>
+          <button class="slide-btn" onclick="nextSlide('art')">→</button>
+        </div>
+        <div class="slide-dots" id="dots-art"></div>
+      </div>
+
+      <div style="margin-top:3rem;border-top:1px solid var(--border);padding-top:2rem;">
+        <div style="font-family:var(--font-display);font-size:1rem;letter-spacing:.1em;color:var(--gray);margin-bottom:1rem;">ADD MORE ART — click a slot to upload</div>
+        <div class="add-photo-grid" id="art-add-grid"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact-section" id="contact">
+  <div class="section-inner">
+    <div class="sec-header">
+      <span class="sec-num">06</span>
+      <h2 class="sec-title">CONT<span class="red">ACT</span></h2>
+    </div>
+    <div class="contact-big">LET'S<br><em>Connect</em></div>
+    <div class="contact-row">
+      <a class="contact-item" href="mailto:makita.islam78@gmail.com">
+        <div><span class="contact-label">Email</span><span class="contact-val">makita.islam78@gmail.com</span></div>
+      </a>
+      <a class="contact-item" href="https://instagram.com/yourhandle" target="_blank" rel="noopener">
+        <div><span class="contact-label">Instagram</span><span class="contact-val">@yourhandle</span></div>
+      </a>
+      <a class="contact-item" href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener">
+        <div><span class="contact-label">LinkedIn</span><span class="contact-val">Makita Islam Mim</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">&copy; 2026 Makita Islam Mim — All rights reserved</span>
+  <span class="footer-name">MIM</span>
+</footer>
+
+</div><!-- #main -->
+
+<script>
+// ── LOADER
+window.addEventListener('load',function(){
+  setTimeout(function(){
+    document.getElementById('loader').classList.add('hidden');
+    document.getElementById('main').classList.add('visible');
+  },1900);
+});
+
+// ── SLIDESHOW
+const state = {
+  photo: { idx: 0 },
+  art:   { idx: 0 }
+};
+
+function getSlides(key){ return document.querySelectorAll('#viewer-'+key+' .slide-img'); }
+
+function buildDots(key){
+  const slides = getSlides(key);
+  const container = document.getElementById('dots-'+key);
+  container.innerHTML = '';
+  slides.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.onclick = ()=>goSlide(key,i);
+    container.appendChild(d);
+  });
+}
+
+function updateSlide(key){
+  const slides = getSlides(key);
+  const dots = document.querySelectorAll('#dots-'+key+' .slide-dot');
+  slides.forEach((s,i)=> s.classList.toggle('active', i===state[key].idx));
+  dots.forEach((d,i)=> d.classList.toggle('active', i===state[key].idx));
+  document.getElementById('counter-'+key).textContent = (state[key].idx+1)+' / '+slides.length;
+  // hide placeholder if any real image loaded
+  const anyLoaded = Array.from(slides).some(s=>s.complete && s.naturalWidth>0 && s.style.display!=='none');
+  const ph = document.getElementById('ph-'+key);
+  if(ph) ph.style.display = anyLoaded ? 'none' : 'flex';
+}
+
+function goSlide(key,i){
+  const slides = getSlides(key);
+  state[key].idx = (i+slides.length)%slides.length;
+  updateSlide(key);
+}
+function nextSlide(key){ goSlide(key, state[key].idx+1); }
+function prevSlide(key){ goSlide(key, state[key].idx-1); }
+
+// keyboard nav
+document.addEventListener('keydown',function(e){
+  const tab = document.querySelector('.slide-tab.active');
+  if(!tab) return;
+  const key = tab.textContent.includes('Photo') ? 'photo' : 'art';
+  if(e.key==='ArrowRight') nextSlide(key);
+  if(e.key==='ArrowLeft')  prevSlide(key);
+});
+
+// ── TAB SWITCH
+function switchTab(key){
+  document.querySelectorAll('.slide-tab').forEach((t,i)=>
+    t.classList.toggle('active', (i===0&&key==='photo')||(i===1&&key==='art'))
+  );
+  document.getElementById('panel-photo').classList.toggle('active', key==='photo');
+  document.getElementById('panel-art').classList.toggle('active', key==='art');
+}
+
+// ── ADD PHOTO SLOTS
+function buildAddSlots(gridId, count){
+  const grid = document.getElementById(gridId);
+  for(let i=0;i<count;i++){
+    const slot = document.createElement('div');
+    slot.className='add-photo-slot';
+    slot.innerHTML=`
+      <img id="${gridId}-img-${i}" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <div class="slot-ph"><span class="plus">+</span><span>Add photo</span></div>
+      <input type="file" accept="image/*" onchange="loadSlotPic(this,'${gridId}-img-${i}')">
+    `;
+    grid.appendChild(slot);
+  }
+}
+
+function loadSlotPic(input, imgId){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const img = document.getElementById(imgId);
+    img.src = e.target.result;
+    img.style.display='block';
+    input.previousElementSibling.style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadPic(input, imgId){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const img = document.getElementById(imgId);
+    img.src = e.target.result;
+    img.style.display='block';
+    img.nextElementSibling && (img.nextElementSibling.style.display='none');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── INIT
+buildDots('photo');
+buildDots('art');
+buildAddSlots('photo-add-grid', 8);
+buildAddSlots('art-add-grid', 8);
+updateSlide('photo');
+updateSlide('art');
+</script>
+</body>
+</html>
